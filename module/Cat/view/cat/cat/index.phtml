@@ -1,0 +1,28 @@
+<?php
+// module/Cat/view/album/album/index.phtml:
+
+$title = 'My cats';
+$this->headTitle($title);
+?>
+<h1><?= $this->escapeHtml($title) ?></h1>
+<p>
+    <a href="<?= $this->url('cat', ['action' => 'add']) ?>">Add new cat</a>
+</p>
+
+<table class="table">
+<tr>
+    <th>Name</th>
+    <th>Race</th>
+    <th>&nbsp;</th>
+</tr>
+<?php foreach ($cats as $cat) : ?>
+    <tr>
+        <td><?= $this->escapeHtml($cat->name) ?></td>
+        <td><?= $this->escapeHtml($cat->race) ?></td>
+        <td>
+            <a href="<?= $this->url('cat', ['action' => 'edit', 'id' => $cat->id]) ?>">Edit</a>
+            <a href="<?= $this->url('cat', ['action' => 'delete', 'id' => $cat->id]) ?>">Delete</a>
+        </td>
+    </tr>
+<?php endforeach; ?>
+</table>

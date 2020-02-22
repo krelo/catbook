@@ -1,0 +1,43 @@
+<?php
+$name = 'Add new cat';
+$this->headTitle($name);
+?>
+<h1><?= $this->escapeHtml($c) ?></h1>
+<?php
+// This provides a default CSS class and placeholder text for the name element:
+$cat = $form->get('name');
+$cat->setAttribute('class', 'form-control');
+$cat->setAttribute('placeholder', 'Cat name');
+
+// This provides a default CSS class and placeholder text for the race element:
+$race = $form->get('race');
+$race->setAttribute('class', 'form-control');
+$race->setAttribute('placeholder', 'Race');
+
+// This provides CSS classes for the submit button:
+$submit = $form->get('submit');
+$submit->setAttribute('class', 'btn btn-primary');
+
+$form->setAttribute('action', $this->url('cat', ['action' => 'add']));
+$form->prepare();
+
+echo $this->form()->openTag($form);
+?>
+<?php // Wrap the elements in divs marked as form groups, and render the
+      // label, element, and errors separately within ?>
+<div class="form-group">
+    <?= $this->formLabel($cat) ?>
+    <?= $this->formElement($cat) ?>
+    <?= $this->formElementErrors()->render($cat, ['class' => 'help-block']) ?>
+</div>
+
+<div class="form-group">
+    <?= $this->formLabel($race) ?>
+    <?= $this->formElement($race) ?>
+    <?= $this->formElementErrors()->render($race, ['class' => 'help-block']) ?>
+</div>
+
+<?php
+echo $this->formSubmit($submit);
+echo $this->formHidden($form->get('id'));
+echo $this->form()->closeTag();
