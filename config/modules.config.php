@@ -32,4 +32,5 @@ return [
     'ZendDeveloperTools',
     'Application',
     'Cat',
+    'Home',
 ];

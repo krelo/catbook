@@ -29,6 +29,7 @@
     "autoload": {
         "psr-4": {
             "Application\\": "module/Application/src/",
+            "Home\\": "module/Home/src/",
             "Cat\\": "module/Cat/src/"
         }
     },
