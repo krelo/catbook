@@ -1,0 +1,47 @@
+<?php
+
+$title = 'Sign In';
+$this->headTitle($title);
+?>
+<h1><?= $this->escapeHtml($title) ?></h1>
+<p>
+    <a href="<?= $this->url('home', ['action' => 'signup']) ?>">Don't have a user yet? Sign up here!</a>
+</p>
+<?php
+// This provides a default CSS class and placeholder text for the name element:
+$user = $form->get('username');
+$user->setAttribute('class', 'form-control');
+$user->setAttribute('placeholder', 'Username');
+
+// This provides a default CSS class and placeholder text for the race element:
+$password = $form->get('password');
+$password->setAttribute('class', 'form-control');
+$password->setAttribute('placeholder', 'Password');
+
+// This provides CSS classes for the submit button:
+$submit = $form->get('submit');
+$submit->setAttribute('class', 'btn btn-primary');
+
+$form->setAttribute('action', $this->url('home', ['action' => 'signin']));
+$form->prepare();
+
+echo $this->form()->openTag($form);
+?>
+<?php // Wrap the elements in divs marked as form groups, and render the
+      // label, element, and errors separately within ?>
+<div class="form-group">
+    <?= $this->formLabel($user) ?>
+    <?= $this->formElement($user) ?>
+    <?= $this->formElementErrors()->render($user, ['class' => 'help-block']) ?>
+</div>
+
+<div class="form-group">
+    <?= $this->formLabel($password) ?>
+    <?= $this->formElement($password) ?>
+    <?= $this->formElementErrors()->render($password, ['class' => 'help-block']) ?>
+</div>
+
+<?php
+echo $this->formSubmit($submit);
+echo $this->formHidden($form->get('id'));
+echo $this->form()->closeTag();

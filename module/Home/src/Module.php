@@ -4,6 +4,7 @@ namespace Home;
 
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Cat\Model\CatTable;
+use User\Model\UserTable;
 
 class Module implements ConfigProviderInterface
 {
@@ -18,7 +19,8 @@ class Module implements ConfigProviderInterface
              'factories' => [
                  Controller\HomeController::class => function($container) {
                      return new Controller\HomeController(
-                         $container->get(CatTable::class)
+                         $container->get(CatTable::class),
+                         $container->get(UserTable::class)
                      );
                  },
              ],

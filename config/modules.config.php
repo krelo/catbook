@@ -33,4 +33,5 @@ return [
     'Application',
     'Cat',
     'Home',
+    'User',
 ];

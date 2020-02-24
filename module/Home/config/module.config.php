@@ -11,7 +11,7 @@ return [
             'home' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route' => '/',
+                    'route' => '/[:action]',
                     'constraints' => [
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'id'     => '[0-9]+',
