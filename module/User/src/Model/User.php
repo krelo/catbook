@@ -18,6 +18,7 @@ class User implements InputFilterAwareInterface
     public $id;
     public $username;
     public $password;
+    public $hashedPassword; // Seperated fields for hashed and plaintext password to avoid confusion
 
     private $inputFilter;
 
@@ -26,6 +27,7 @@ class User implements InputFilterAwareInterface
         $this->id     = !empty($data['id']) ? $data['id'] : null;
         $this->username = !empty($data['username']) ? $data['username'] : null;
         $this->password  = !empty($data['password']) ? $data['password'] : null;
+        $this->hashedPassword  = !empty($data['hashedPassword']) ? $data['hashedPassword'] : null;
     }
 
     public function getArrayCopy()
@@ -34,6 +36,7 @@ class User implements InputFilterAwareInterface
             'id'     => $this->id,
             'username' => $this->username,
             'password'  => $this->password,
+            'hashedPassword'  => $this->hashedPassword,
         ];
     }
 

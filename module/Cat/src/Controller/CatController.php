@@ -7,18 +7,24 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Cat\Form\CatForm;
 use Cat\Model\Cat;
+use Zend\Authentication\AuthenticationService;
 
 class CatController extends AbstractActionController
 {
     private $table;
+    private $auth;
 
     public function __construct(CatTable $table)
     {
         $this->table = $table;
+        $this->auth = new AuthenticationService();
     }
 
     public function indexAction()
     {
+        if (!$this->auth->hasIdentity()){
+            return $this->redirect()->toRoute('home', ['action' => 'signin']);
+        }
         return new ViewModel([
             'cats' => $this->table->fetchAll(),
         ]);
@@ -26,6 +32,9 @@ class CatController extends AbstractActionController
 
     public function addAction()
     {
+        if (!$this->auth->hasIdentity()){
+            return $this->redirect()->toRoute('home', ['action' => 'signin']);
+        }
         $form = new CatForm();
         $form->get('submit')->setValue('Add');
 
@@ -50,6 +59,9 @@ class CatController extends AbstractActionController
 
     public function editAction()
     {
+        if (!$this->auth->hasIdentity()){
+            return $this->redirect()->toRoute('home', ['action' => 'signin']);
+        }
         $id = (int) $this->params()->fromRoute('id', 0);
 
         if (0 === $id) {
@@ -91,6 +103,9 @@ class CatController extends AbstractActionController
 
     public function deleteAction()
     {
+        if (!$this->auth->hasIdentity()){
+            return $this->redirect()->toRoute('home', ['action' => 'signin']);
+        }
         $id = (int) $this->params()->fromRoute('id', 0);
         if (!$id) {
             return $this->redirect()->toRoute('cat');

@@ -28,6 +28,10 @@ class Module implements ConfigProviderInterface
                     $resultSetPrototype->setArrayObjectPrototype(new Model\User());
                     return new TableGateway('user', $dbAdapter, null, $resultSetPrototype);
                 },
+                Model\UserAuthAdapter::class => function($container) {
+                    $table = $container->get(Model\UserTable::class);
+                    return new Model\UserAuthAdapter($table);
+                },
             ],
         ];
     }

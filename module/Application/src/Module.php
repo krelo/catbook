@@ -15,4 +15,16 @@ class Module
     {
         return include __DIR__ . '/../config/module.config.php';
     }
+
+    // Setup default AuthService for identityhelper to use
+    public function getServiceConfig()
+    {
+        return [
+            'factories' => [
+                \Zend\Authentication\AuthenticationService::class => function($container) {
+                    return new \Zend\Authentication\AuthenticationService();
+                },
+            ],
+        ];
+    }
 }

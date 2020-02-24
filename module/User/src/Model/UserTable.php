@@ -35,7 +35,7 @@ class UserTable
         $row = $rowset->current();
         if (! $row) {
             throw new RuntimeException(sprintf(
-                'Could not find row with identifier %d',
+                'Could not find row with identifier %s',
                 $username
             ));
         }
@@ -43,17 +43,29 @@ class UserTable
         return $row;
     }
 
+
+    public function userExists($username) : bool {
+        $rowset = $this->tableGateway->select(['username' => $username]);
+        $row = $rowset->current();
+        if (! $row) {
+            return false;
+        }
+        return true;
+    }
+
+
+
     public function createUser(User $user)
     {
         $data = [
             'username' => $user->username,
-            'password'  => $user->password,
+            'hashedPassword'  => $user->hashedPassword,
         ];
 
         $id = (int) $username->id;
 
         if ($id === 0) {
-            $existingUser = $this->getUserByName($user->username);
+            $existingUser = $this->userExists($user->username);
             if ($existingUser)
             {
                 throw new RuntimeException(sprintf(
@@ -69,7 +81,7 @@ class UserTable
     {
         $data = [
             'username' => $user->username,
-            'password'  => $user->password,
+            'hashedPassword'  => $user->hashedPassword,
         ];
 
         $id = (int) $username->id;

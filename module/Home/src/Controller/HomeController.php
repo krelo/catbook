@@ -8,18 +8,22 @@ use Zend\View\Model\ViewModel;
 use User\Form\UserForm;
 use User\Model\UserTable;
 use User\Model\User;
+use User\Model\UserAuthAdapter;
+use Zend\Authentication\AuthenticationService;
+use Zend\Crypt\Password\Bcrypt;
 use RuntimeException;
 
 class HomeController extends AbstractActionController
 {
-
     private $table;
     private $usertable;
+    private $auth;
 
-    public function __construct(CatTable $table, UserTable $usertable)
+    public function __construct(CatTable $table, UserTable $usertable, AuthenticationService $auth)
     {
         $this->table = $table;
         $this->usertable = $usertable;
+        $this->auth = $auth;
     }
 
     public function indexAction()
@@ -29,8 +33,14 @@ class HomeController extends AbstractActionController
         ]);
     }
 
+    // Using Zend/Authentication will handle persistent identity for me
+    // Created adapter implementation that uses database to store user
+    // Using Bcrypt to secure database in 
     public function signinAction()
     {
+        if ($this->auth->hasIdentity()){
+            return $this->redirect()->toRoute('home');
+        }
         $form = new UserForm();
         $form->get('submit')->setValue('Sign In');
 
@@ -49,27 +59,24 @@ class HomeController extends AbstractActionController
         }
 
         $user->exchangeArray($form->getData());
-        
-        try {
+        $userAuthAdapter = new UserAuthAdapter($this->usertable);
+        $userAuthAdapter->setUsername($user->username);
+        $userAuthAdapter->setPassword($user->password);
+        $result = $this->auth->authenticate($userAuthAdapter);
 
-            $savedUser = $this->usertable->getUserByName($user->username);
-        }
-        catch (RunTimeException $e){
-            $form->get('username')->setMessages(['Username does not exist']);
-            return ['form' => $form];
-        }
-
-        if ($savedUser && $savedUser->password == $user->password ){
+        if ($result->isValid()){
             return $this->redirect()->toRoute('cat');
         }
 
-        $form->get('password')->setMessages(['Username and password do not match']);
+        $form->get('password')->setMessages(['Username or Password is invalid']);
         return ['form' => $form];
-        
     }
 
     public function signUpAction()
     {
+        if ($this->auth->hasIdentity()){
+            return $this->redirect()->toRoute('home');
+        }
         $form = new UserForm();
         $form->get('submit')->setValue('Create User');
 
@@ -88,6 +95,10 @@ class HomeController extends AbstractActionController
         }
 
         $user->exchangeArray($form->getData());
+        // Nobody likes storing plaintext passwords. Bcrypt seems to be the recommended way of 'encrypting' passwords in ZendFramework
+        $bcrypt = new Bcrypt();
+        $user->hashedPassword = $bcrypt->create($user->password);
+        
         try {
             $this->usertable->createUser($user);
         } 
@@ -96,6 +107,21 @@ class HomeController extends AbstractActionController
             $form->get('username')->setMessages(['Username is in use']);
             return ['form' => $form];
         }   
+        
+        $userAuthAdapter = new UserAuthAdapter($this->usertable);
+        $userAuthAdapter->setUsername($user->username);
+        $userAuthAdapter->setPassword($user->password);
+        // Should be success since the user was just created with theese credentials
+        $result = $this->auth->authenticate($this->userAuthAdapter);
+
+        // Should redirect back to signin if authentication failed
         return $this->redirect()->toRoute('cat');    
+    }
+
+    public function signoutAction()
+    {
+        $this->auth = new AuthenticationService();
+        $this->auth->clearIdentity();
+        return $this->redirect()->toRoute('home');    
     }
 }
