@@ -8,6 +8,7 @@ use Zend\View\Model\ViewModel;
 use Cat\Form\CatForm;
 use Cat\Model\Cat;
 use Zend\Authentication\AuthenticationService;
+use RuntimeException;
 
 class CatController extends AbstractActionController
 {
@@ -25,8 +26,11 @@ class CatController extends AbstractActionController
         if (!$this->auth->hasIdentity()){
             return $this->redirect()->toRoute('home', ['action' => 'signin']);
         }
+
+        $userId = $this->auth->getIdentity();
+
         return new ViewModel([
-            'cats' => $this->table->fetchAll(),
+            'cats' => $this->table->fetchByUser($userId),
         ]);
     }
 
@@ -35,8 +39,11 @@ class CatController extends AbstractActionController
         if (!$this->auth->hasIdentity()){
             return $this->redirect()->toRoute('home', ['action' => 'signin']);
         }
+        $userId = $this->auth->getIdentity();
+
         $form = new CatForm();
         $form->get('submit')->setValue('Add');
+        $form->get('owner_id')->setValue($userId);
 
         $request = $this->getRequest();
 
@@ -44,6 +51,7 @@ class CatController extends AbstractActionController
             return ['form' => $form];
         }
 
+     
         $cat = new Cat();
         $form->setInputFilter($cat->getInputFilter());
         $form->setData($request->getPost());
@@ -51,6 +59,8 @@ class CatController extends AbstractActionController
         if (! $form->isValid()) {
             return ['form' => $form];
         }
+
+        $data = $form->getData();
 
         $cat->exchangeArray($form->getData());
         $this->table->saveCat($cat);
@@ -62,6 +72,7 @@ class CatController extends AbstractActionController
         if (!$this->auth->hasIdentity()){
             return $this->redirect()->toRoute('home', ['action' => 'signin']);
         }
+
         $id = (int) $this->params()->fromRoute('id', 0);
 
         if (0 === $id) {
@@ -80,6 +91,7 @@ class CatController extends AbstractActionController
         $form = new CatForm();
         $form->bind($cat);
         $form->get('submit')->setAttribute('value', 'Edit');
+        
 
         $request = $this->getRequest();
         $viewData = ['id' => $id, 'form' => $form];

@@ -15,6 +15,8 @@ class Cat implements InputFilterAwareInterface
     public $id;
     public $name;
     public $race;
+    public $ownerId;
+    public $ownerName;
 
     private $inputFilter;
 
@@ -23,6 +25,8 @@ class Cat implements InputFilterAwareInterface
         $this->id     = !empty($data['id']) ? $data['id'] : null;
         $this->name = !empty($data['name']) ? $data['name'] : null;
         $this->race  = !empty($data['race']) ? $data['race'] : null;
+        $this->ownerId  = !empty($data['owner_id']) ? $data['owner_id'] : null;
+        $this->ownerName  = !empty($data['owner_name']) ? $data['owner_name'] : null;
     }
 
     public function getArrayCopy()
@@ -31,6 +35,8 @@ class Cat implements InputFilterAwareInterface
             'id'     => $this->id,
             'name' => $this->name,
             'race'  => $this->race,
+            'owner_id'  => $this->ownerId,
+            'owner_name'  => $this->ownerName,
         ];
     }
 
@@ -93,6 +99,14 @@ class Cat implements InputFilterAwareInterface
                         'max' => 100,
                     ],
                 ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name' => 'owner_id',
+            'required' => true,
+            'filters' => [
+                ['name' => ToInt::class],
             ],
         ]);
 

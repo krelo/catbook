@@ -39,6 +39,7 @@ class UserAuthAdapter implements AdapterInterface
         if ($user){
             $bcrypt = new Bcrypt();
             if ($bcrypt->verify($this->password, $user->hashedPassword)){
+                // Not sure if i should use username for identity, but Id seems more usefull, when showing users own cats.
                 return new Result(Result::SUCCESS, $user->id);
             }
         }

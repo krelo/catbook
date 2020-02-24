@@ -36,5 +36,9 @@ class CatForm extends Form
                 'id'    => 'submitbutton',
             ],
         ]);
+        $this->add([
+            'name' => 'owner_id',
+            'type' => 'hidden',
+        ]);
     }
 }

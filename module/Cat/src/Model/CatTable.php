@@ -19,6 +19,11 @@ class CatTable
         return $this->tableGateway->select();
     }
 
+    public function fetchByUser($id)
+    {
+        return $this->tableGateway->select(['owner_id' => $id]);
+    }
+
     public function getCat($id)
     {
         $id = (int) $id;
@@ -39,6 +44,7 @@ class CatTable
         $data = [
             'name' => $cat->name,
             'race'  => $cat->race,
+            'owner_id'  => $cat->ownerId,
         ];
 
         $id = (int) $cat->id;
@@ -63,5 +69,25 @@ class CatTable
     public function deleteCat($id)
     {
         $this->tableGateway->delete(['id' => (int) $id]);
+    }
+
+    // Join in owner name on each row
+    public function fetchAllDetailed()
+    {
+        $sqlSelect = $this->tableGateway->getSql()->select();
+        $sqlSelect->columns(array('name', 'race', 'owner_id'));
+        $sqlSelect->join('user', 'cat.owner_id = user.id', array('owner_name' => 'username'), 'left');
+
+        $statement = $this->tableGateway->getSql()->prepareStatementForSqlObject($sqlSelect);
+        $resultSet = $statement->execute();
+
+        $result = array();
+        while ($resultSet->next()){
+            $cat = new Cat();
+            $cat->exchangeArray($resultSet->current());
+            $result[] = $cat;
+        }
+
+        return $result;
     }
 }

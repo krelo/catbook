@@ -1,16 +1,20 @@
 <?php
-// module/Cat/view/album/album/index.phtml:
-
 $title = 'Kitty Cats';
 $this->headTitle($title);
 ?>
 <h1><?= $this->escapeHtml($title) ?></h1>
 
 <table class="table">
+<tr>
+    <th>Name</th>
+    <th>Race</th>
+    <th>Owner</th>
+</tr>
 <?php foreach ($cats as $cat) : ?>
     <tr>
         <td><?= $this->escapeHtml($cat->name) ?></td>
         <td><?= $this->escapeHtml($cat->race) ?></td>
+        <td><?= $this->escapeHtml($cat->ownerName) ?></td>
     </tr>
 <?php endforeach; ?>
 </table>

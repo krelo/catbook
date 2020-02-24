@@ -29,7 +29,7 @@ class HomeController extends AbstractActionController
     public function indexAction()
     {
         return new ViewModel([
-            'cats' => $this->table->fetchAll(),
+            'cats' => $this->table->fetchAllDetailed(),
         ]);
     }
 
