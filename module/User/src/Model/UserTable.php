@@ -54,11 +54,11 @@ class UserTable
     }
 
 
-
     public function createUser(User $user)
     {
         $data = [
             'username' => $user->username,
+            'name' => $user->name,
             'hashedPassword'  => $user->hashedPassword,
         ];
 
@@ -81,6 +81,7 @@ class UserTable
     {
         $data = [
             'username' => $user->username,
+            'name' => $user->name,
             'hashedPassword'  => $user->hashedPassword,
         ];
 

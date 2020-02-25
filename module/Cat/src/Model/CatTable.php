@@ -45,6 +45,7 @@ class CatTable
             'name' => $cat->name,
             'race'  => $cat->race,
             'owner_id'  => $cat->ownerId,
+            'photo_url'  => $cat->photoUrl,
         ];
 
         $id = (int) $cat->id;
@@ -75,8 +76,8 @@ class CatTable
     public function fetchAllDetailed()
     {
         $sqlSelect = $this->tableGateway->getSql()->select();
-        $sqlSelect->columns(array('name', 'race', 'owner_id'));
-        $sqlSelect->join('user', 'cat.owner_id = user.id', array('owner_name' => 'username'), 'left');
+        $sqlSelect->columns(array('name', 'race', 'photo_url', 'owner_id'));
+        $sqlSelect->join('user', 'cat.owner_id = user.id', array('owner_name' => 'name'), 'left');
 
         $statement = $this->tableGateway->getSql()->prepareStatementForSqlObject($sqlSelect);
         $resultSet = $statement->execute();

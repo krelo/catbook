@@ -29,6 +29,13 @@ class CatForm extends Form
             ],
         ]);
         $this->add([
+            'name' => 'photo_url',
+            'type' => 'text',
+            'options' => [
+                'label' => 'Photo',
+            ],
+        ]);
+        $this->add([
             'name' => 'submit',
             'type' => 'submit',
             'attributes' => [

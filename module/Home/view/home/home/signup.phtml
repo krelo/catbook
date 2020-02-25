@@ -7,17 +7,18 @@ $this->headTitle($title);
 <a href="<?= $this->url('home', ['action' => 'signin']) ?>">Already have a user? Sign in here!</a>
 
 <?php
-// This provides a default CSS class and placeholder text for the name element:
 $user = $form->get('username');
 $user->setAttribute('class', 'form-control');
 $user->setAttribute('placeholder', 'Username');
 
-// This provides a default CSS class and placeholder text for the race element:
+$name = $form->get('name');
+$name->setAttribute('class', 'form-control');
+$name->setAttribute('placeholder', 'Name');
+
 $password = $form->get('password');
 $password->setAttribute('class', 'form-control');
 $password->setAttribute('placeholder', 'Password');
 
-// This provides CSS classes for the submit button:
 $submit = $form->get('submit');
 $submit->setAttribute('class', 'btn btn-primary');
 
@@ -38,6 +39,12 @@ echo $this->form()->openTag($form);
     <?= $this->formLabel($password) ?>
     <?= $this->formElement($password) ?>
     <?= $this->formElementErrors()->render($password, ['class' => 'help-block']) ?>
+</div>
+
+<div class="form-group">
+    <?= $this->formLabel($name) ?>
+    <?= $this->formElement($name) ?>
+    <?= $this->formElementErrors()->render($name, ['class' => 'help-block']) ?>
 </div>
 
 <?php

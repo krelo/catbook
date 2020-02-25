@@ -14,6 +14,10 @@ $race = $form->get('race');
 $race->setAttribute('class', 'form-control');
 $race->setAttribute('placeholder', 'Race');
 
+$photo = $form->get('photo_url');
+$photo->setAttribute('class', 'form-control');
+$photo->setAttribute('placeholder', 'Photo URL');
+
 $submit = $form->get('submit');
 $submit->setAttribute('class', 'btn btn-primary');
 
@@ -37,6 +41,12 @@ echo $this->form()->openTag($form);
     <?= $this->formElementErrors()->render($race, ['class' => 'help-block']) ?>
 </div>
 
+
+<div class="form-group">
+    <?= $this->formLabel($photo) ?>
+    <?= $this->formElement($photo) ?>
+    <?= $this->formElementErrors()->render($photo, ['class' => 'help-block']) ?>
+</div>
 <?php
 echo $this->formSubmit($submit);
 echo $this->formHidden($form->get('id'));

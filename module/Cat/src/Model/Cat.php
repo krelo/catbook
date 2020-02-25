@@ -15,6 +15,7 @@ class Cat implements InputFilterAwareInterface
     public $id;
     public $name;
     public $race;
+    public $photoUrl;
     public $ownerId;
     public $ownerName;
 
@@ -25,6 +26,7 @@ class Cat implements InputFilterAwareInterface
         $this->id     = !empty($data['id']) ? $data['id'] : null;
         $this->name = !empty($data['name']) ? $data['name'] : null;
         $this->race  = !empty($data['race']) ? $data['race'] : null;
+        $this->photoUrl  = !empty($data['photo_url']) ? $data['photo_url'] : null;
         $this->ownerId  = !empty($data['owner_id']) ? $data['owner_id'] : null;
         $this->ownerName  = !empty($data['owner_name']) ? $data['owner_name'] : null;
     }
@@ -32,9 +34,10 @@ class Cat implements InputFilterAwareInterface
     public function getArrayCopy()
     {
         return [
-            'id'     => $this->id,
+            'id'  => $this->id,
             'name' => $this->name,
-            'race'  => $this->race,
+            'race' => $this->race,
+            'photo_url' => $this->photoUrl,
             'owner_id'  => $this->ownerId,
             'owner_name'  => $this->ownerName,
         ];
@@ -88,6 +91,24 @@ class Cat implements InputFilterAwareInterface
             'required' => true,
             'filters' => [
                 ['name' => StripTags::class],
+                ['name' => StringTrim::class],
+            ],
+            'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'encoding' => 'UTF-8',
+                        'min' => 1,
+                        'max' => 100,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name' => 'photo_url',
+            'required' => false,
+            'filters' => [
                 ['name' => StringTrim::class],
             ],
             'validators' => [

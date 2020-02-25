@@ -18,6 +18,7 @@ class User implements InputFilterAwareInterface
     public $id;
     public $username;
     public $password;
+    public $name;
     public $hashedPassword; // Seperated fields for hashed and plaintext password to avoid confusion
 
     private $inputFilter;
@@ -26,6 +27,7 @@ class User implements InputFilterAwareInterface
     {
         $this->id     = !empty($data['id']) ? $data['id'] : null;
         $this->username = !empty($data['username']) ? $data['username'] : null;
+        $this->name = !empty($data['name']) ? $data['name'] : null;
         $this->password  = !empty($data['password']) ? $data['password'] : null;
         $this->hashedPassword  = !empty($data['hashedPassword']) ? $data['hashedPassword'] : null;
     }
@@ -35,6 +37,7 @@ class User implements InputFilterAwareInterface
         return [
             'id'     => $this->id,
             'username' => $this->username,
+            'name' => $this->name,
             'password'  => $this->password,
             'hashedPassword'  => $this->hashedPassword,
         ];
@@ -67,6 +70,25 @@ class User implements InputFilterAwareInterface
         $inputFilter->add([
             'name' => 'username',
             'required' => true,
+            'filters' => [
+                ['name' => StripTags::class],
+                ['name' => StringTrim::class],
+            ],
+            'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'encoding' => 'UTF-8',
+                        'min' => 1,
+                        'max' => 100,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name' => 'name',
+            'required' => false,
             'filters' => [
                 ['name' => StripTags::class],
                 ['name' => StringTrim::class],

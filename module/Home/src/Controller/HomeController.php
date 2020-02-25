@@ -99,8 +99,8 @@ class HomeController extends AbstractActionController
         $bcrypt = new Bcrypt();
         $user->hashedPassword = $bcrypt->create($user->password);
         
+        $this->usertable->createUser($user);
         try {
-            $this->usertable->createUser($user);
         } 
         catch (RuntimeException $e)
         {
@@ -112,7 +112,7 @@ class HomeController extends AbstractActionController
         $userAuthAdapter->setUsername($user->username);
         $userAuthAdapter->setPassword($user->password);
         // Should be success since the user was just created with theese credentials
-        $result = $this->auth->authenticate($this->userAuthAdapter);
+        $result = $this->auth->authenticate($userAuthAdapter);
 
         // Should redirect back to signin if authentication failed
         return $this->redirect()->toRoute('cat');    

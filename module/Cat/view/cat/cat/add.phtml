@@ -4,17 +4,18 @@ $this->headTitle($name);
 ?>
 <h1><?= $this->escapeHtml($c) ?></h1>
 <?php
-// This provides a default CSS class and placeholder text for the name element:
 $cat = $form->get('name');
 $cat->setAttribute('class', 'form-control');
 $cat->setAttribute('placeholder', 'Cat name');
 
-// This provides a default CSS class and placeholder text for the race element:
 $race = $form->get('race');
 $race->setAttribute('class', 'form-control');
 $race->setAttribute('placeholder', 'Race');
 
-// This provides CSS classes for the submit button:
+$photo = $form->get('photo_url');
+$photo->setAttribute('class', 'form-control');
+$photo->setAttribute('placeholder', 'Photo URL');
+
 $submit = $form->get('submit');
 $submit->setAttribute('class', 'btn btn-primary');
 
@@ -35,6 +36,12 @@ echo $this->form()->openTag($form);
     <?= $this->formLabel($race) ?>
     <?= $this->formElement($race) ?>
     <?= $this->formElementErrors()->render($race, ['class' => 'help-block']) ?>
+</div>
+
+<div class="form-group">
+    <?= $this->formLabel($photo) ?>
+    <?= $this->formElement($photo) ?>
+    <?= $this->formElementErrors()->render($photo, ['class' => 'help-block']) ?>
 </div>
 
 <?php
