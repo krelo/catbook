@@ -1,3 +1,18 @@
+# Catbook
+My PHP test project by KH
+
+## Description
+
+We have a frontpage that shows all cats with picture and ownername.
+If you sign in as a user you get a page called My Cats, where you can create or edit your own cats.
+
+## Notes by KH
+
+Followed this tutorial to get started https://docs.zendframework.com/tutorials/getting-started/overview/
+Uses SQLite for database. data/schema.sql has SQL for intial db.
+Used docker for development environment.
+For login i used zend-authentication, which handles persistent identity.
+
 # ZendSkeletonApplication
 
 ## Introduction
